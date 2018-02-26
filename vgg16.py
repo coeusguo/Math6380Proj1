@@ -48,9 +48,8 @@ class Model():
     # values scaled [0, 1]
     def build(self, rgb, train=False):
         rgb_scaled = rgb * 255.0
-
         # Convert RGB to BGR
-        red, green, blue = tf.split(3, 3, rgb_scaled)
+        red, green, blue = tf.split(rgb_scaled, [1,1,1], [3])
         assert red.get_shape().as_list()[1:] == [224, 224, 1]
         assert green.get_shape().as_list()[1:] == [224, 224, 1]
         assert blue.get_shape().as_list()[1:] == [224, 224, 1]
