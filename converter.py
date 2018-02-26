@@ -83,21 +83,46 @@ def crop(img, label, counter):
 		img_name = str(ct) + '.jpg'
 		cv2.imwrite(os.path.join(dir, img_name), sub_image[:, :, (2, 1, 0)])
 
+def get_some_crops_from_one_dispute_painting(img):
+	max_height = img.shape[0] - OUTPUT_SIZE[0]
+	max_width = img.shape[1] - OUTPUT_SIZE[1]
+	crop_number = (max_height // OUTPUT_SIZE[0]) * (max_width // OUTPUT_SIZE[1])
+	allsubimages = []
+	for _ in range(crop_number):
+		start_point = (random.randint(0, max_height), random.randint(0, max_width))  # (height, width)
+		sub_image = img[start_point[0]:start_point[0] + OUTPUT_SIZE[0],
+					start_point[1]:start_point[1] + OUTPUT_SIZE[1], :]
+		allsubimages.append(sub_image)
+	return np.array(allsubimages)
 
 # cv2.imwrite('test.jpg', im[:, :, (2, 1, 0)])
 # print(im.shape)
 counter = [0, 0, 0]
-for item in yes:
-	im = load_img(item)
-	crop(im, 'yes', counter)
+# for item in yes:
+# 	im = load_img(item)
+# 	crop(im, 'yes', counter)
+#
+# for item in no:
+# 	im = load_img(item)
+# 	crop(im, 'no', counter)
 
-for item in no:
-	im = load_img(item)
-	crop(im, 'no', counter)
+disputed_paintings = []
+index_to_num = {}
+for i in range(len(DISPUTE)):
+	index_to_num[DISPUTE[i]] = i
 
 for item in disputed:
 	im = load_img(item)
 	crop(im, 'disputed', counter)
+	crops = get_some_crops_from_one_dispute_painting(im, crop_number=16)
+	disputed_paintings.append(crops)
+
+def send_crops_of_this_dispute_painting(number_on_disk):
+	if number_on_disk not in DISPUTE:
+		raise ValueError('it has to be in 1 7 10 20 23 25 26')
+	idx = index_to_num[number_on_disk]
+	return disputed_paintings[idx]
+
 
 
 
