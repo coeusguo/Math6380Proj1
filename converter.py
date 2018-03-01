@@ -98,13 +98,13 @@ def get_some_crops_from_one_dispute_painting(img):
 # cv2.imwrite('test.jpg', im[:, :, (2, 1, 0)])
 # print(im.shape)
 counter = [0, 0, 0]
-# for item in yes:
-# 	im = load_img(item)
-# 	crop(im, 'yes', counter)
-#
-# for item in no:
-# 	im = load_img(item)
-# 	crop(im, 'no', counter)
+for item in yes:
+	im = load_img(item)
+	crop(im, 'yes', counter)
+
+for item in no:
+	im = load_img(item)
+	crop(im, 'no', counter)
 
 disputed_paintings = []
 index_to_num = {}
